@@ -1,0 +1,7 @@
+services:
+  uploader:
+    image: python:3.10
+    volumes:
+      - ./:/usr/src/
+    tty: true
+    stdin_open: true

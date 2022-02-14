@@ -2,7 +2,7 @@ import os
 import argparse
 import time
 import boto3
-from tqenv import load_env, get_ev
+from dotenv import load_dotenv
 from botocore.exceptions import ClientError
 from queue import Queue
 from threading import Thread, Event
@@ -15,8 +15,8 @@ class S3UploaderException(Exception):
 def get_client(region):
     return boto3.client(
         's3',
-        aws_access_key_id=get_ev('AWS_KEY'),
-        aws_secret_access_key=get_ev('AWS_SECRET'),
+        aws_access_key_id=os.getenv('AWS_KEY'),
+        aws_secret_access_key=os.getenv('AWS_SECRET'),
         region_name=region
     )
 
@@ -106,7 +106,7 @@ def main():
             raise S3UploaderException('Env file {} does not exists'.format(args.env_file))
         if args.threads < 1:
             raise S3UploaderException('At least one thread is required')
-        load_env(args.env_file)
+        load_dotenv(args.env_file)
         threads = generate_threads(
             run_event,
             args.directory,
